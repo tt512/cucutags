@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 # Copyright (C) 2013 Red Hat, Inc.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
@@ -19,7 +20,6 @@
 # CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 import os
 import io
 import re
@@ -29,6 +29,10 @@ logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
                     level=logging.INFO)
 import parse
 import argparse
+
+__docformat__ = 'reStructuredText'
+__version__ = "0.3.0"
+__author__ = u"Matěj Cepl <mcepl_at_redhat_dot_com>"
 
 
 class Target(object):
@@ -137,45 +141,42 @@ class CodeFile(io.TextIOWrapper):
         return out
 
 
-def walker(startdir):
-    feature_list = []
-    target_list = []
+class Session(object):
+    def __init__(self, startdir):
+        self.feature_list = []
+        self.target_list = []
 
-    for root, dirs, files in os.walk(startdir):
-        for directory in dirs:
-            d = SourceFile(directory)
-            if d.ishidden():
-                dirs.remove(d.name)
+        for root, dirs, files in os.walk(startdir):
+            for directory in dirs:
+                d = SourceFile(directory)
+                if d.ishidden():
+                    dirs.remove(d.name)
 
-        for f in files:
-            in_f = CodeFile(os.path.join(root, f))
+            for f in files:
+                in_f = CodeFile(os.path.join(root, f))
 
-            new_out = in_f.process_file(root)
-            feature_list.extend(new_out['features'])
-            target_list.extend(new_out['targets'])
+                new_out = in_f.process_file(root)
+                self.feature_list.extend(new_out['features'])
+                self.target_list.extend(new_out['targets'])
 
-    return feature_list, target_list
+    def generate_tags(self, out_dir):
+        out = []
+        for feat in self.feature_list:
+            trg = feat.match(self.target_list)
+            if trg:
+                rel_filename = os.path.relpath(trg.filename, out_dir)
+                logging.debug("feat = %s", feat)
+                logging.debug("trg.filename = %s", rel_filename)
+                logging.debug("trg.lineno = %s", trg.lineno)
+                out.append((feat, rel_filename, trg.lineno,))
 
+        return out
 
-def matcher(features, targets, out_dir):
-    out = []
-    for feat in features:
-        trg = feat.match(targets)
-        if trg:
-            rel_filename = os.path.relpath(trg.filename, out_dir)
-            logging.debug("feat = %s", feat)
-            logging.debug("trg.filename = %s", rel_filename)
-            logging.debug("trg.lineno = %s", trg.lineno)
-            out.append((feat, rel_filename, trg.lineno,))
-
-    return out
-
-
-def get_step(feature, feat_list, target_list):
-    for feat in feat_list:
-        trg = feat.match(target_list)
-        if trg:
-            return trg.filename, trg.lineno
+    def get_step(self, feature):
+        for feat in self.feature_list:
+            trg = feat.match(self.target_list)
+            if trg:
+                return trg.filename, trg.lineno
 
 
 if __name__ == "__main__":
@@ -197,7 +198,7 @@ if __name__ == "__main__":
         outdir = os.curdir
     logging.debug("outf = %s", outf)
 
-    raw = walker(os.curdir)
-    res = matcher(raw[0], raw[1], outdir)
+    raw = Session(os.curdir)
+    res = raw.generate_tags(outdir)
     for r in res:
         outf.write(unicode("%s\t%s\t%s\n" % r))
