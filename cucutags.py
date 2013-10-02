@@ -171,6 +171,13 @@ def matcher(features, targets, out_dir):
     return out
 
 
+def get_step(feature, feat_list, target_list):
+    for feat in feat_list:
+        trg = feat.match(target_list)
+        if trg:
+            return trg.filename, trg.lineno
+
+
 if __name__ == "__main__":
     desc = """
     Generate tags from Behave feature files and steps.
