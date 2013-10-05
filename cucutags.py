@@ -21,6 +21,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import os
+import os.path
 import io
 import re
 import sys
@@ -28,10 +29,9 @@ import logging
 logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
                     level=logging.INFO)
 import parse
-import argparse
 
 __docformat__ = 'reStructuredText'
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 __author__ = u"Matěj Cepl <mcepl_at_redhat_dot_com>"
 
 
@@ -118,6 +118,7 @@ class CodeFile(io.TextIOWrapper):
             'targets': [],
             'features': []
         }
+        logging.debug("self.name = %s", self.name)
         file_ext = os.path.splitext(self.name)[1]
         if file_ext in PATTERNS.keys():
             ftype = PATTERNS[file_ext]
@@ -145,6 +146,7 @@ class Session(object):
     def __init__(self, startdir):
         self.feature_list = []
         self.target_list = []
+        assert(os.path.exists(startdir))
 
         for root, dirs, files in os.walk(startdir):
             for directory in dirs:
@@ -173,9 +175,11 @@ class Session(object):
         return out
 
     def get_step(self, feature):
-        for feat in self.feature_list:
-            trg = feat.match(self.target_list)
-            if trg:
+        logging.debug("feature = %s", feature)
+        logging.debug("self.target_list = %s", self.target_list)
+        for trg in self.target_list:
+            logging.debug("trg = %s", trg)
+            if trg.ismatch(feature):
                 return trg.filename, trg.lineno
 
 
@@ -183,15 +187,8 @@ if __name__ == "__main__":
     desc = """
     Generate tags from Behave feature files and steps.
     """
-    parser = argparse.ArgumentParser(description=desc)
-    parser.add_argument("-o", "--output", metavar="OUTPUT",
-                        action="store", dest="output", default=None,
-                        help="Name of the output file")
-    options = parser.parse_args()
-
-    logging.debug("options.output = %s", options.output)
-    if options.output:
-        outf = io.open(options.output, "w")
+    if len(sys.argv) > 1:
+        outf = io.open(sys.argv[1], "w")
         outdir = os.path.dirname(outf.name)
     else:
         outf = sys.stdout
