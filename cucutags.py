@@ -31,7 +31,7 @@ logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
 import parse
 
 __docformat__ = 'reStructuredText'
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 __author__ = u"Matěj Cepl <mcepl_at_redhat_dot_com>"
 
 

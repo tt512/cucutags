@@ -37,7 +37,7 @@ setup(
     author=u'Matěj Cepl',
     author_email='mcepl@redhat.com',
     url='https://gitorious.org/cucutags/cucutags/',
-    long_description=read("README.md"),
+    long_description=read("README"),
     cmdclass={'test': RunTests},
     keywords=['BDD', 'behave', 'ctags', 'tags'],
     classifiers=[
