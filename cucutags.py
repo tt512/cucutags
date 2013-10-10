@@ -31,7 +31,7 @@ logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
 import parse
 
 __docformat__ = 'reStructuredText'
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 __author__ = u"Matěj Cepl <mcepl_at_redhat_dot_com>"
 
 
@@ -39,7 +39,7 @@ class Target(object):
     """
     Represents one line from the Python modules.
     """
-    pattern = re.compile(r"^\s*@(step|when|then)\(u'(.*)'\)")
+    pattern = re.compile(r"^\s*@(step|when|given|then)\(u'(.*)'\)")
     result = 'targets'
 
     def __init__(self, text, filename, lineno):
