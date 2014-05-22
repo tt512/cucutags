@@ -1,28 +1,8 @@
 # coding: utf-8
 from __future__ import absolute_import, print_function
-from distutils.core import setup, Command
+from setuptools import setup
 import os.path
 import cucutags
-import unittest
-
-
-class RunTests(Command):
-    """New setup.py command to run all tests for the package.
-    """
-    description = "run all tests for the package"
-
-    user_options = []
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        tests = unittest.TestLoader().discover('.')
-        runner = unittest.TextTestRunner(verbosity=2)
-        runner.run(tests)
 
 
 def read(fname):
@@ -38,7 +18,7 @@ setup(
     author_email='mcepl@redhat.com',
     url='https://gitorious.org/cucutags/cucutags/',
     long_description=read("README"),
-    cmdclass={'test': RunTests},
+    test_suite='test',
     keywords=['BDD', 'behave', 'ctags', 'tags'],
     classifiers=[
         "Programming Language :: Python",
