@@ -31,7 +31,7 @@ logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
 import parse
 
 __docformat__ = 'reStructuredText'
-__version__ = "0.7.0"
+__version__ = "0.7.1"
 __author__ = u"Matěj Cepl <mcepl_at_redhat_dot_com>"
 
 
@@ -40,6 +40,7 @@ class Target(object):
     Represents one line from the Python modules.
     """
     pattern = re.compile(r"^\s*@(step|when|given|then)\(u?'(.*)'\)")
+    cleanRE = re.compile('^(step|when|given|then)\s*', re.IGNORECASE)
     result = 'targets'
 
     def __init__(self, text, filename, lineno):
@@ -59,7 +60,7 @@ class Target(object):
         Checks whether the target line can be expanded to match
         the Feature.
         """
-        out = self.parser.parse(feature)
+        out = self.parser.parse(self.cleanRE.sub('', feature))
         if out:
             logging.debug("out = %s", out)
         return out
@@ -129,12 +130,8 @@ class CodeFile(io.TextIOWrapper):
                 lineno = 0
                 for line in f.readlines():
                     lineno += 1
-                    logging.debug('line = %s', line)
-                    logging.debug('pattern = %s', ftype.pattern.pattern)
                     matches = ftype.pattern.search(line)
                     if matches:
-                        logging.debug("key = %s", ftype.result)
-                        logging.debug("value = %s", matches.group(2))
                         obj = ftype(matches.group(2), self.name, lineno)
                         out[ftype.result].append(obj)
 
@@ -178,9 +175,8 @@ class Session(object):
         return out
 
     def get_step(self, feature):
-        logging.debug("feature = %s", feature)
-        logging.debug("self.target_list = %s", self.target_list)
         for trg in self.target_list:
+            logging.debug("feature = %s", feature)
             logging.debug("trg = %s", trg)
             if trg.ismatch(feature):
                 return trg.filename, trg.lineno
