@@ -31,7 +31,7 @@ logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
 import parse
 
 __docformat__ = 'reStructuredText'
-__version__ = "0.6.1"
+__version__ = "0.7.0"
 __author__ = u"Matěj Cepl <mcepl_at_redhat_dot_com>"
 
 
@@ -39,7 +39,7 @@ class Target(object):
     """
     Represents one line from the Python modules.
     """
-    pattern = re.compile(r"^\s*@(step|when|given|then)\(u'(.*)'\)")
+    pattern = re.compile(r"^\s*@(step|when|given|then)\(u?'(.*)'\)")
     result = 'targets'
 
     def __init__(self, text, filename, lineno):
@@ -123,11 +123,14 @@ class CodeFile(io.TextIOWrapper):
         if file_ext in PATTERNS.keys():
             ftype = PATTERNS[file_ext]
 
-            logging.debug("cdir = %s, file = %s", cdir, self.name)
+            logging.debug("cdir = %s, file = %s, ftype = %s",
+                          cdir, self.name, ftype)
             with io.open(self.name) as f:
                 lineno = 0
                 for line in f.readlines():
                     lineno += 1
+                    logging.debug('line = %s', line)
+                    logging.debug('pattern = %s', ftype.pattern.pattern)
                     matches = ftype.pattern.search(line)
                     if matches:
                         logging.debug("key = %s", ftype.result)

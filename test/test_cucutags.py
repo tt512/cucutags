@@ -22,7 +22,10 @@ class TestCucutags(unittest.TestCase):
         """Generate tags and compare with expected result."""
         tags = [tuple(x[1:]) for x in
                 self.session.generate_tags(self.datadir)]
-        expected = [(u'common_steps/app.py', 59),
+        expected = [(u'features/steps/tutorial.py', 3),
+                    (u'features/steps/tutorial.py', 7),
+                    (u'features/steps/tutorial.py', 11),
+                    (u'common_steps/app.py', 59),
                     (u'common_steps/gmenu.py', 12),
                     (u'common_steps/gmenu.py', 34),
                     (u'common_steps/app.py', 59),
