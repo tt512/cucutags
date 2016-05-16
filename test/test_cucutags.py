@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-  IGNORE:C0111
 from __future__ import absolute_import, print_function, unicode_literals
-import os.path
-import cucutags
-import unittest
+
 import logging
+import os.path
+import unittest
+
+import cucutags
 
 
 class TestCucutags(unittest.TestCase):
@@ -22,9 +24,10 @@ class TestCucutags(unittest.TestCase):
         """Generate tags and compare with expected result."""
         tags = [tuple(x[1:]) for x in
                 self.session.generate_tags(self.datadir)]
-        expected = [(u'features/steps/tutorial.py', 3),
-                    (u'features/steps/tutorial.py', 7),
-                    (u'features/steps/tutorial.py', 11),
+        expected = [(u'common_steps/app.py', 59),
+                    (u'common_steps/gmenu.py', 12),
+                    (u'common_steps/gmenu.py', 34),
+                    (u'common_steps/app.py', 66),
                     (u'common_steps/app.py', 59),
                     (u'common_steps/gmenu.py', 12),
                     (u'common_steps/gmenu.py', 34),
@@ -32,10 +35,9 @@ class TestCucutags(unittest.TestCase):
                     (u'common_steps/app.py', 17),
                     (u'common_steps/app.py', 42),
                     (u'common_steps/app.py', 66),
-                    (u'common_steps/app.py', 59),
-                    (u'common_steps/gmenu.py', 12),
-                    (u'common_steps/gmenu.py', 34),
-                    (u'common_steps/app.py', 66)]
+                    (u'features/steps/tutorial.py', 3),
+                    (u'features/steps/tutorial.py', 7),
+                    (u'features/steps/tutorial.py', 11)]
         self.assertEqual(tags, expected)
 
     def test_find_step(self):
