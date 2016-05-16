@@ -20,18 +20,20 @@
 # CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+import io
+import logging
 import os
 import os.path
-import io
 import re
 import sys
-import logging
-logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
-                    level=logging.INFO)
+
 import parse
 
+logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
+                    level=logging.INFO)
+
 __docformat__ = 'reStructuredText'
-__version__ = "0.7.2"
+__version__ = "0.7.3"
 __author__ = u"Matěj Cepl <mcepl_at_redhat_dot_com>"
 
 
@@ -109,12 +111,11 @@ class SourceFile(object):
 class CodeFile(io.TextIOWrapper):
     def __init__(self, filename):
         filename = os.path.abspath(filename)
-        io.TextIOWrapper.__init__(self,
-                                  io.BufferedReader(
-                                  io.FileIO(filename, "r")))
+        io.TextIOWrapper.__init__(
+            self, io.BufferedReader(io.FileIO(filename, "r")))
 
     def process_file(self, cdir):
-        PATTERNS = {'.py': Target, '.feature': Feature}
+        PATTERNS = {'.py': Target, '.feature': Feature}  # noqa
         out = {
             'targets': [],
             'features': []

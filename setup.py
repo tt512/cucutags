@@ -1,8 +1,11 @@
 # coding: utf-8
 from __future__ import absolute_import, print_function
-from setuptools import setup
+
 import os.path
+
 import cucutags
+
+from setuptools import setup
 
 
 def read(fname):
@@ -16,10 +19,10 @@ setup(
     description='Generates ctags for BDD .feature/behave steps',
     author=u'Matěj Cepl',
     author_email='mcepl@redhat.com',
-    url='https://gitorious.org/cucutags/cucutags/',
+    url='https://gitlab.com/mcepl/cucutags',
     long_description=read("README"),
     test_suite='test',
-    keywords=['BDD', 'behave', 'ctags', 'tags'],
+    keywords='BDD behave ctags tags',
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 2",
