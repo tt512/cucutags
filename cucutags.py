@@ -156,11 +156,10 @@ class Session(object):
                     dirs.remove(d.name)
 
             for f in files:
-                in_f = CodeFile(os.path.join(root, f))
-
-                new_out = in_f.process_file(root)
-                self.feature_list.extend(new_out['features'])
-                self.target_list.extend(new_out['targets'])
+                with CodeFile(os.path.join(root, f)) as in_f:
+                    new_out = in_f.process_file(root)
+                    self.feature_list.extend(new_out['features'])
+                    self.target_list.extend(new_out['targets'])
 
     def generate_tags(self, out_dir):
         out = []
