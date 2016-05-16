@@ -3,8 +3,6 @@ from __future__ import absolute_import, print_function
 
 import os.path
 
-import cucutags
-
 from setuptools import setup
 
 
@@ -15,7 +13,7 @@ def read(fname):
 setup(
     name='cucutags',
     py_modules=['cucutags'],
-    version=str(cucutags.__version__),
+    version="0.7.3",
     description='Generates ctags for BDD .feature/behave steps',
     author=u'Matěj Cepl',
     author_email='mcepl@redhat.com',
@@ -28,10 +26,10 @@ setup(
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: pypy",
         "Programming Language :: Python :: 3.3",
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: Implementation :: PyPy",
         "Development Status :: 3 - Alpha",
         "Environment :: Console",
         "Intended Audience :: Information Technology",
@@ -40,5 +38,5 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Software Development :: Testing"
     ],
-    requires=["parse"]
+    install_requires=["parse"]
 )

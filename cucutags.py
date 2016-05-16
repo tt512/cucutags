@@ -33,7 +33,6 @@ logging.basicConfig(format='%(levelname)s:%(funcName)s:%(message)s',
                     level=logging.INFO)
 
 __docformat__ = 'reStructuredText'
-__version__ = "0.7.3"
 __author__ = u"Matěj Cepl <mcepl_at_redhat_dot_com>"
 
 

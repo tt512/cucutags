@@ -18,7 +18,8 @@ class TestCucutags(unittest.TestCase):
     def test_init_session(self):
         """Just initialize Session from data in the data
         subdirectory."""
-        self.assertIsInstance(self.session, cucutags.Session)
+        # We cannot use assertIsInstance because of 2.6 compatibility
+        self.assertTrue(isinstance(self.session, cucutags.Session))
 
     def test_generate_tags(self):
         """Generate tags and compare with expected result."""
