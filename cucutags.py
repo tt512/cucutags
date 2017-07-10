@@ -21,6 +21,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import io
+import itertools
 import logging
 import os
 import os.path
@@ -83,6 +84,9 @@ class Feature(object):
 
     def __str__(self):
         return self.__unicode__().encode("utf-8")
+
+    def __cmp__(self, other):
+        return cmp(self.text, other.text)
 
     def match(self, targlist):
         """
@@ -170,7 +174,8 @@ class Session(object):
                 logging.debug("trg.filename = %s", rel_filename)
                 logging.debug("trg.lineno = %s", trg.lineno)
                 out.append((feat, rel_filename, trg.lineno,))
-
+        out = sorted(out)
+        out = [x for x, _ in itertools.groupby(out)]
         return out
 
     def get_step(self, feature):

@@ -13,7 +13,7 @@ def read(fname):
 setup(
     name='cucutags',
     py_modules=['cucutags'],
-    version="0.7.3",
+    version="0.7.4",
     description='Generates ctags for BDD .feature/behave steps',
     author=u'Matěj Cepl',
     author_email='mcepl@redhat.com',
